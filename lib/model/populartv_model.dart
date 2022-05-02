@@ -2,18 +2,18 @@ import 'package:equatable/equatable.dart';
 
 class Populartv_Model extends Equatable {
   final int id;
-  final String name;
-  final List<String> origin_country;
-  final String original_language;
-  final String original_name;
-  final String overview;
-  final double popularity;
-  final String poster_path;
-  final String vote_average;
-  final String vote_count;
-  final String backdrop_path;
-  final String first_air_date;
-  final List<int> genre_ids;
+  final String? name;
+  final List<dynamic> origin_country;
+  final String? original_language;
+  final String? original_name;
+  final String? overview;
+  final double? popularity;
+  final String? poster_path;
+  final double? vote_average;
+  final int vote_count;
+  final String? backdrop_path;
+  final String? first_air_date;
+  final List<dynamic> genre_ids;
 
   const Populartv_Model(
       {required this.id,
@@ -34,7 +34,7 @@ class Populartv_Model extends Equatable {
     return Populartv_Model(
       id: json["id"],
       name: json["name"],
-      origin_country: json["origin_country"],
+      origin_country: json["origin_country"] ,
       original_language: json["original_language"],
       original_name: json["original_name"],
       overview: json["overview"],
@@ -44,7 +44,7 @@ class Populartv_Model extends Equatable {
       vote_count: json["vote_count"],
       backdrop_path: json["backdrop_path"],
       first_air_date: json["first_air_date"],
-      genre_ids: json["genre_ids"],
+      genre_ids: json["genre_ids"] ,
 
     );
   }

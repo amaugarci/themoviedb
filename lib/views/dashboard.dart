@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:test/views/favourite.dart';
+import 'package:test/views/home.dart';
 import 'package:test/views/search.dart';
 
-import 'home.dart';
-
 class DashboardScreen extends StatefulWidget {
-  dynamic currentTab;
-  Widget currentPage = HomeScreen();
-  DashboardScreen({Key? key, this.currentTab}) {
-    currentTab = 0;
+  DashboardScreen({Key? key}) {
   }
 
   @override
@@ -16,35 +12,46 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  int _selectedIndex = 0;
+  String title="home";
+  final _pageController = PageController(initialPage: 0);
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-
-  // int? _currentIndex;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // _currentIndex = widget.currentTab as int;
   }
-
-  @override
-  Widget build(BuildContext context) {
-     int _selectedIndex = 1;
-    final _pageController = PageController(initialPage: 0);
-    void _onItemTapped(int index) {
-        // print("object");
+  void _onItemTapped(int index) {
       setState(() {
         _selectedIndex = index;
+        switch(index){
+          case 0:setState(() {
+            title="home";
+          });break;
+          case 1:setState(() {
+            title="favorite";
+          });break;
+          case 2:setState(() {
+            title="search";
+          });break;
+        }
       });
       _pageController.animateToPage(index, duration: const Duration(microseconds: 300),curve: Curves.easeIn);
     }
+  @override
+  Widget build(BuildContext context) {   
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: Container(),
+        title: Text(title),
+      ),
       backgroundColor:Colors.white,
       key: scaffoldKey,
       body: PageView(
         physics: NeverScrollableScrollPhysics(),
         controller: _pageController,
-        children: const [
+        children:  [
           HomeScreen(),
           FavouriteScreen(),
           SearchScreen()

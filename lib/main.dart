@@ -3,7 +3,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/services.dart';
 import 'package:test/routes.dart';
 
-void main() {
+Future<void> main() async{
+  await dotenv.load();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
 class MyApp extends StatefulWidget {
@@ -20,7 +22,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
+      theme: ThemeData.light(),
+      title:"Test",
       debugShowCheckedModeBanner: false,
       initialRoute: '/index',
       onGenerateRoute: RouteGenerator.generateRoute,
