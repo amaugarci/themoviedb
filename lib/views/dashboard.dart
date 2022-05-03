@@ -13,6 +13,7 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  bool changed=false;
   int _selectedIndex = 0;
   String title="home";
   final _pageController = PageController(initialPage: 0);
