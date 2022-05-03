@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:test/database/index.dart';
 import 'package:test/views/favourite.dart';
 import 'package:test/views/home.dart';
 import 'package:test/views/search.dart';
@@ -16,7 +17,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String title="home";
   final _pageController = PageController(initialPage: 0);
   final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-
   @override
   void initState() {
     super.initState();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test/controller/index.dart';
+import 'package:test/database/index.dart';
 import 'package:test/model/populartv_model.dart';
 import 'package:test/views/widget/card.dart';
 
@@ -11,10 +12,41 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int length=0;
   int page = 1;
+  List<bool> isfavorite=[];
   late List<Populartv_Model> popularTV = [];
   final _con = PopularTVController();
   bool isloading = true, isexpanding = true, isend = false;
+  late DatabaseHandler handler;
+  Future<void> getfavoirte() async{
+    setState(() {
+      isfavorite.clear();
+    });
+    final  mid=await this.handler.retrieveUsers();
+    for(int i=0;i<length;i++){
+      isfavorite.add(false);
+      for(int j=0;j<mid.length;j++){
+        if(popularTV[i].id==mid[j].id){
+          isfavorite[i]=true;
+          break;
+        }
+      }
+    }
+  }
+  Future<void> addfavoirte(int index,int id,String title,String description,String image) async{
+    if(isfavorite[index]){
+      this.handler.deleteUser(id);
+      setState(() {
+        isfavorite[index]=false;
+      });
+    }else{
+      this.handler.insertUser([PV(id: id,title: title,description: description,image: image)]);
+      setState(() {
+        isfavorite[index]=true;
+      });
+    }
+  }
   Future<void> getData({required String page}) async {
     if (!isend) {
       final mid = await _con.getPopularTv(page);
@@ -25,8 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       if (isloading) {
         setState(() {
-          isloading = false;
           popularTV.addAll(mid);
+          getfavoirte();
+          isloading = false;
         });
       } else {
         setState(() {
@@ -34,17 +67,24 @@ class _HomeScreenState extends State<HomeScreen> {
             isexpanding = false;
           });
           popularTV.addAll(mid);
+          getfavoirte();
           setState(() {
             isexpanding = true;
           });
         });
       }
+      setState(() {
+        length=popularTV.length;
+      });
     }
   }
-
   @override
   void initState() {
     getData(page: page.toString());
+    this.handler = DatabaseHandler();
+    this.handler.initializeDB().whenComplete(() async {
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -94,8 +134,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         description: popularTV[index].overview==null
                                         ? ""
                                         : popularTV[index].overview!,
-                              onpress: () {},
-                              isfavorite: false);
+                              onpress: () {addfavoirte(index, popularTV[index].id, popularTV[index].original_name.toString(), popularTV[index].overview!, popularTV[index].poster_path!);},
+                              isfavorite: isfavorite[index]);
                         }),
                   ),
                   Container(
